@@ -64,7 +64,6 @@ public class IPTokenBasedRememberMeServices extends
 
 	public String getUserIPAddress(HttpServletRequest httpServletRequest) {
 		String ipStr = httpServletRequest.getRemoteAddr();
-		System.out.println(ipStr);
 		return ipStr;
 	}
 
