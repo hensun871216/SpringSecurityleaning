@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:security="http://www.springframework.org/schema/security"
+	xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<jdbc:initialize-database data-source="dataSource"
+		enabled="true">
+		<jdbc:script encoding="utf-8" location="classpath:security-schema.sql" />
+	</jdbc:initialize-database>
+	<security:http auto-config="true" use-expressions="true">
+		<security:remember-me key="springTest"
+			services-ref="ipTokenBasedRememberMeServices" />
+		<security:logout invalidate-session="true"
+			logout-success-url="/" logout-url="/logout" />
+		<security:intercept-url pattern="/login.do"
+			access="permitAll" />
+		<security:intercept-url pattern="/account/*.do"
+			access="hasRole('ROLE_USER') and fullyAuthenticated" />
+		<security:intercept-url pattern="/*"
+			access="hasRole('ROLE_USER')" />
+		<security:form-login login-page="/login.do" />
+	</security:http>
+	<security:authentication-manager alias="authenticationManager">
+		<security:authentication-provider>
+			<security:jdbc-user-service
+				data-source-ref="dataSource" />
+			<!-- <security:authentication-provider user-service-ref="userService"> 
+				<security:user-service id="userService"> <security:user name="guest" password="guest" 
+				authorities="ROLE_USER"/> </security:user-service> -->
+		</security:authentication-provider>
+	</security:authentication-manager>
+
+</beans>
