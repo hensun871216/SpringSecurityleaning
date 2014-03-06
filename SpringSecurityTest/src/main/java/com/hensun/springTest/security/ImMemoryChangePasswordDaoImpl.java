@@ -18,6 +18,7 @@ public class ImMemoryChangePasswordDaoImpl extends InMemoryDaoImpl implements
 				userDetails.isAccountNonExpired(),
 				userDetails.isCredentialsNonExpired(),
 				userDetails.isAccountNonLocked(), userDetails.getAuthorities());
+		System.out.println("hahaa");
 		getUserMap().addUser(userDetailsNew);
 	}
 
