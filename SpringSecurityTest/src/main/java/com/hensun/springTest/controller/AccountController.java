@@ -3,6 +3,7 @@ package com.hensun.springTest.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,6 +22,9 @@ public class AccountController extends BaseController {
 	@Autowired
 	IChangePassword changePasswordDao;
 	
+//	@Autowired
+//	JdbcUserDetailsManager jdbcUserDetailsManager;
+	
 	@RequestMapping("/account/home.do")
 	public void accountHome() {		
 	}
@@ -28,7 +32,7 @@ public class AccountController extends BaseController {
 	public void showChangePasswordPage() {		
 	}
 	@RequestMapping(value="/account/changePassword.do",method=RequestMethod.POST)
-	public String submitChangePasswordPage(@RequestParam("password") String newPassword) {
+	public String submitChangePasswordPage(@RequestParam("password") String newPassword, @RequestParam("oldpassword")String oldPassword) {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		String username = principal.toString();
@@ -38,7 +42,7 @@ public class AccountController extends BaseController {
 		
 		changePasswordDao.changePassword(username, newPassword);
 		SecurityContextHolder.clearContext();
-		
+//		jdbcUserDetailsManager.changePassword(oldPassword, newPassword);
 		return "redirect:home.do";
 	}
 }

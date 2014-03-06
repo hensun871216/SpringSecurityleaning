@@ -1,35 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
-
+	<context:annotation-config />
+	<context:component-scan base-package="com.hensun.springTest.security"/>
 	<bean id="ipTokenBasedRememberMeServices"
 		class="com.hensun.springTest.security.IPTokenBasedRememberMeServices">
-			<property name="key" value="springTest"></property>
-			<property name="userDetailsService" ref="userService"></property>
+		<property name="key" value="springTest"></property>
+		<property name="userDetailsService" ref="jdbcUserService"></property>
 	</bean>
-	<bean id="userService"
-		class="com.hensun.springTest.security.ImMemoryChangePasswordDaoImpl">
-		<property name="userProperties">
-			<props>
-				<prop key="guest">guest,ROLE_USER</prop>
-			</props>
+	<!-- <bean id="userService" class="com.hensun.springTest.security.ImMemoryChangePasswordDaoImpl"> 
+		<property name="userProperties"> <props> <prop key="guest">guest,ROLE_USER</prop> 
+		</props> </property> </bean> -->
+
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName">
+			<value>com.mysql.jdbc.Driver</value>
+		</property>
+		<property name="url">
+			<value>jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&amp;characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull
+			</value>
+		</property>
+		<property name="username">
+			<value>root</value>
+		</property>
+		<property name="password">
+			<value>871216</value>
 		</property>
 	</bean>
-	
-	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName">
-            <value>org.mariadb.jdbc.Driver</value>
-        </property>
-        <property name="url">
-         <value>jdbc:mariadb://127.0.0.1:3306/test?useUnicode=true&amp;characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull</value>
-        </property>
-        <property name="username">
-            <value>root</value>
-        </property>
-        <property name="password">
-            <value>871216</value>
-        </property>
-    </bean>
+
+
+	<bean id="jdbcUserService" class="com.hensun.springTest.security.CustomJdbcDaoImp">
+		<property name="dataSource" ref="dataSource" />
+		<property name="enableGroups" value="true" />
+		<property name="enableAuthorities" value="false" />
+	</bean>
+
+	<!-- <bean id="jdbcUserService" class="org.springframework.security.provisioning.JdbcUserDetailsManager"> 
+		<property name="dataSource" ref="dataSource"/> <property name="authenticationManager" 
+		ref="authenticationManager"/> 
+		</bean> 
+		 -->
+	<bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"> 
+	</bean>
+		
+	<bean id="databasePasswordSecureBean"
+		class="com.hensun.springTest.security.DatabasePasswordSecureBean" init-method="secureDatabase" depends-on="dataSource">
+			<property name="dataSource" ref="dataSource"/>
+	</bean>
 </beans>
