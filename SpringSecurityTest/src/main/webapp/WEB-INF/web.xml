@@ -6,9 +6,8 @@
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
-			WEB-INF/dogstore-beans.xml
 			WEB-INF/dogstore-security.xml
-			WEB-INF/dogstore-servlet.xml
+			WEB-INF/dogstore-beans.xml
 		</param-value>
 	</context-param>
 

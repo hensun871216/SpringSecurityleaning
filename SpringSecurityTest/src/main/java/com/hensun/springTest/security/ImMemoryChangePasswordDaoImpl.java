@@ -6,9 +6,6 @@ import org.springframework.security.core.userdetails.memory.InMemoryDaoImpl;
 public class ImMemoryChangePasswordDaoImpl extends InMemoryDaoImpl implements
 		IChangePassword {
 
-	public ImMemoryChangePasswordDaoImpl() {
-		super();
-	}
 
 	public void changePassword(String userName, String newPassword) {
 		// getUserDetails

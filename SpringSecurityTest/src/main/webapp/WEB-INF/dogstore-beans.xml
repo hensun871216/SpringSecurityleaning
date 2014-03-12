@@ -2,20 +2,12 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
-
-	<context:annotation-config />
+	<context:annotation-config/>
 	<context:component-scan base-package="com.hensun.springTest.security"/>
-	<bean id="ipTokenBasedRememberMeServices"
-		class="com.hensun.springTest.security.IPTokenBasedRememberMeServices">
-		<property name="key" value="springTest"></property>
-		<property name="userDetailsService" ref="jdbcUserService"></property>
-	</bean>
-	<!-- <bean id="userService" class="com.hensun.springTest.security.ImMemoryChangePasswordDaoImpl"> 
-		<property name="userProperties"> <props> <prop key="guest">guest,ROLE_USER</prop> 
-		</props> </property> </bean> -->
-
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName">
@@ -32,6 +24,16 @@
 			<value>871216</value>
 		</property>
 	</bean>
+	
+	<bean id="ipTokenBasedRememberMeServices"
+		class="com.hensun.springTest.security.IPTokenBasedRememberMeServices">
+		<property name="key" value="springTest"></property>
+		<property name="userDetailsService" ref="jdbcUserService"></property>
+	</bean>
+	<!-- 
+	<bean id="userService" class="com.hensun.springTest.security.ImMemoryChangePasswordDaoImpl"> 
+		<property name="userProperties"> <props> <prop key="guest">guest,ROLE_USER</prop> 
+		</props> </property> </bean> -->
 
 
 	<bean id="jdbcUserService" class="com.hensun.springTest.security.CustomJdbcDaoImp">
@@ -45,11 +47,29 @@
 		ref="authenticationManager"/> 
 		</bean> 
 		 -->
-	<bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"> 
-	</bean>
 		
 	<bean id="databasePasswordSecureBean"
 		class="com.hensun.springTest.security.DatabasePasswordSecureBean" init-method="secureDatabase" depends-on="dataSource">
 			<property name="dataSource" ref="dataSource"/>
+	</bean>
+	<bean id="passwordEncoder"
+		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+	</bean>
+	<bean id="persistentTokenBasedRememberMeServices"
+		class="org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices" >
+		<constructor-arg name="key" value="springTest"/>
+		<constructor-arg name="userDetailsService" ref="jdbcUserService"/>
+		<constructor-arg name="tokenRepository">
+			<bean class="org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl">
+				<property name="dataSource" ref="dataSource"/>
+			</bean>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="productServiceImpl"
+		class="com.hensun.springTest.security.ProductServiceImpl">
+	</bean>
+	<bean id="productDao"
+		class="com.hensun.springTest.dao.ProductDao">
 	</bean>
 </beans>

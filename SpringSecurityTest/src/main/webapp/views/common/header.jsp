@@ -9,7 +9,12 @@
 </head>
 <body>
 <div id="header">
-
+	<c:url value="/" var="homeUrl"/>
+	<li><a href="${homeUrl}">Home</a></li>
+	<c:if test="${showLoginLink}">
+		<c:url value="/login.do" var="loginUrl"/>
+		<li><a href="${loginUrl}">Log In 2</a></li>
+	</c:if>
 <%-- End of Ch 3 
 	<div class="username">
 		Welcome, <strong><sec:authentication property="principal.username"/></strong>

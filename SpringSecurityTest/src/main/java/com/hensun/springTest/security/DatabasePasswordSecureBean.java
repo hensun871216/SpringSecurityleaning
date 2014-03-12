@@ -12,8 +12,6 @@ public class DatabasePasswordSecureBean extends JdbcDaoSupport {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	public DatabasePasswordSecureBean() {
-	}
 
 	public void secureDatabase() {
 		getJdbcTemplate().query("select username, password from users",
@@ -21,19 +19,15 @@ public class DatabasePasswordSecureBean extends JdbcDaoSupport {
 					public void processRow(ResultSet rs) throws SQLException {
 						String username = rs.getString(1);
 						String password = rs.getString(2);
-						String encodePassword = passwordEncoder
-								.encode(password);
+						String encodePassword = passwordEncoder.encode(password);
+						System.out.println("11111=" + passwordEncoder.encode("123456"));
+						System.out.println("22222=" + passwordEncoder.encode("123456"));
 						getJdbcTemplate().update(
 								"update users set password=? where username=?",
 								new Object[] { encodePassword, username });
 						logger.debug("update password for user:" + username
-								+ " encodePassword:" + password);
+								+ " encodePassword:" + password + "oldPassword"+ password);
 					}
 				});
-	}
-	
-	
-	public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
-		this.passwordEncoder = passwordEncoder;
 	}
 }

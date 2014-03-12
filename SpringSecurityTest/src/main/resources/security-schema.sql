@@ -1,9 +1,5 @@
 -- ref. Appendix A of Spring Sec 3.0 manual
-drop table if exists group_authorities ;
-drop table if exists group_members;
-drop table if exists authorities;
-drop table if exists users;
-drop table if exists groups;
+
 
 create table users(
       username varchar(50) not null primary key,

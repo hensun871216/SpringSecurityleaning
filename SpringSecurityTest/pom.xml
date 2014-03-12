@@ -103,6 +103,11 @@
 			<version>1.7.6</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>1.7.4</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -113,6 +118,13 @@
 					<groupId>org.apache.tomcat.maven</groupId>
 					<artifactId>tomcat7-maven-plugin</artifactId>
 					<version>2.0-beta-1</version>
+					<configuration>
+						<path>/SpringSecurityTest</path>
+						<port>9080</port>
+						<httpsPort>9443</httpsPort>
+						<keystorePass>123456</keystorePass>
+						<keystoreFile>conf/.keystore</keystoreFile>
+					</configuration>
 				</plugin>
 			</plugins>
 		</pluginManagement>
